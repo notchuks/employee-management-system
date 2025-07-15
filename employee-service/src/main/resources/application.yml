@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: employee-service
+    bad_request: 400
+    conflict: 409
+    ok: 200
+    not_found: 404
+
+  flyway: #flyway automatically uses the datasource from the application to connect to the DB
+    enabled: true # enables flyway database migration
+    locations: classpath:db/migration/structure, classpath:db/migration/data # the location where flyway should look for migration scripts
+    validate-on-migrate: true
+    default-schema: ems_employees
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ems_employees
+    username: spinup
+    password: spinup
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret: my_secret
+server:
+  port: 8082

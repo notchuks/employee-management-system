@@ -1,0 +1,10 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+/.idea
+ems.iml
+/api-gateway/target
+/auth-service/target
+/config-server/target
+/discovery-service/target
+/employee-service/target

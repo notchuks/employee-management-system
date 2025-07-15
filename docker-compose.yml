@@ -1,0 +1,105 @@
+version: "3.8"
+services:
+  gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - gateway-auth
+      - gateway-config
+      - gateway-discovery
+      - gateway-employee
+    depends_on:
+      - auth
+      - config
+      - discovery
+      - employee
+
+  auth:
+    build: ./auth-service
+    ports:
+      - "8081:8081"
+    networks:
+      - gateway-auth
+      - auth-postgres
+      - auth-employee
+      - discovery-auth
+    depends_on:
+      - postgres
+      - employee
+
+  config:
+    build: ./config-server
+    ports:
+      - "8083:8083"
+    networks:
+      - discovery-config
+    depends_on:
+      - postgres
+
+  discovery:
+    build: ./discovery-service
+    ports:
+      - "8761:8761"
+    networks:
+      - discovery-employee
+      - discovery-gateway
+      - discovery-auth
+    depends_on:
+      - postgres
+
+  employee:
+    build: ./employee-service
+    ports:
+      - "8082:8082"
+    networks:
+      - gateway-employee
+      - discovery-employee
+      - employee-postgres
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: container-pg
+    image: postgres
+    hostname: localhost
+    ports:
+      - "5431:5431"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: test_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: container-pgadmin
+    networks:
+      - employee-postgres
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+
+networks:
+    gateway-auth:
+    gateway-config:
+    gateway-discovery:
+    gateway-employee:
+    discovery-employee:
+    discovery-auth:
+    discovery-config:
+    discovery-gateway:
+    employee-postgres:
+    auth-postgres:
+    auth-employee:
+
