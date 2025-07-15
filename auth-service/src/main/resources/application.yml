@@ -32,3 +32,12 @@ jwt:
   secret: my_secret
 server:
   port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    org.springframework.security: TRACE

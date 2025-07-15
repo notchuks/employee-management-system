@@ -9,3 +9,8 @@ spring:
       server:
         git:
           uri: https://github.com/notchuks/spring-cloud-config-server.git
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
