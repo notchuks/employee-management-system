@@ -18,23 +18,35 @@ spring:
   cloud:
     gateway:
       mvc:
+        discovery:
+          locator:
+            enabled: true
+            lowerCaseServiceId: true
         routes:
           - id: auth_service
-            uri: lb://auth-service
+            uri: lb://AUTH-SERVICE
             predicates:
               - Path=/auth/**
+            filters:
+              - StripPrefix=1
           - id: employee_service
-            uri: lb://employee-service
+            uri: lb://EMPLOYEE-SERVICE
             predicates:
               - Path=/employees/**
+            filters:
+              - StripPrefix=1
           - id: config-server
-            uri: lb://config-server
+            uri: lb://CONFIG-SERVER
             predicates:
               - Path=/config/**
+            filters:
+              - StripPrefix=1
           - id: discovery-service
             uri: lb://DISCOVERY-SERVICE
             predicates:
               - Path=/discovery/**
+            filters:
+              - StripPrefix=1
 
   security:
     jwt:
