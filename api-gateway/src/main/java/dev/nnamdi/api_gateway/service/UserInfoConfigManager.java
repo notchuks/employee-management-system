@@ -24,6 +24,7 @@ public class UserInfoConfigManager implements UserDetailsService {
         log.info("User: ", registerDto);
 
         if (registerDto != null) {
+            log.info("Roles: ", registerDto.getBody().getRoles());
             return org.springframework.security.core.userdetails.User.builder()
                     .username(registerDto.getBody().getUsername())
                     .password(registerDto.getBody().getPassword())
