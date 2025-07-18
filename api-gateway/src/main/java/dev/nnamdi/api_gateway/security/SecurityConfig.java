@@ -1,11 +1,10 @@
-package dev.nnamdi.auth_service.security;
+package dev.nnamdi.api_gateway.security;
 
-import dev.nnamdi.auth_service.service.UserInfoConfigManager;
-import dev.nnamdi.auth_service.utils.Constants;
+import dev.nnamdi.api_gateway.service.UserInfoConfigManager;
+import dev.nnamdi.api_gateway.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -29,9 +28,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers(Constants.PUBLIC_URLS).permitAll()
+                        .requestMatchers("/api/test/public/hello/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/test/private/**").hasRole("ADMIN")
+                        .anyRequest()
+                        .authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

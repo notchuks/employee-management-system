@@ -46,4 +46,11 @@ public class UserServiceImpl implements UserService {
                 .responseCode(success)
                 .message(" User created successfully").build();
     }
+
+    // using RegisterDto here cause of the name. It is the same as UserDto
+    @Override
+    public RegisterDto findUserByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        return userMapper.convertToDto(user);
+    }
 }

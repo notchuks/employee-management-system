@@ -2,6 +2,7 @@ package dev.nnamdi.auth_service.controller;
 
 import dev.nnamdi.auth_service.model.dto.LoginDto;
 import dev.nnamdi.auth_service.model.dto.RegisterDto;
+import dev.nnamdi.auth_service.model.entity.User;
 import dev.nnamdi.auth_service.model.response.LoginResponse;
 import dev.nnamdi.auth_service.security.JwtUtil;
 import dev.nnamdi.auth_service.service.UserInfoConfigManager;
@@ -16,10 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -35,6 +33,11 @@ public class UserController {
 
     @Autowired
     private UserInfoConfigManager userInfoConfigManager;
+
+    @GetMapping("/users/{username}")
+    public ResponseEntity<RegisterDto> getByUserName(@PathVariable String username) {
+        return ResponseEntity.ok(userService.findUserByUsername(username));
+    }
 
     @PostMapping("/register/")
     public ResponseEntity<Object> register(@Valid @RequestBody RegisterDto registerDto) {
